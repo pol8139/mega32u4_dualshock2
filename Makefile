@@ -1,24 +1,25 @@
-PROG = main
-OBJS = ${PROG}.o
+PROG = example
+OBJS = ${PROG}.o mega32u4_dualshock2.o mega32u4_uart.o
 MCU = atmega32u4
 F_CPU = 16000000UL
 
 ELF = $(PROG)
-IHEX = $(PROG).ihex
+HEX = $(PROG).hex
+# HEX = example.hex
 
 CC = avr-gcc
 CFLAGS = -g -O2 -mmcu=$(MCU) -DF_CPU=$(F_CPU)
 LDFLAGS = -g -O2 -mmcu=$(MCU)
 OBJCOPY = avr-objcopy
 
-all: $(IHEX)
+all: $(HEX)
 
-$(IHEX): $(ELF)
+$(HEX): $(ELF)
 
 $(ELF): $(OBJS)
 
-%.ihex: %
+%.hex: %
 	$(OBJCOPY) -j .text -j .data -O ihex $< $@
 
 clean:
-	-$(RM) $(ELF) $(IHEX) $(OBJS)
+	-$(RM) $(ELF) $(HEX) $(OBJS)

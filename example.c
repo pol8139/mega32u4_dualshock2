@@ -2,24 +2,13 @@
 #define __AVR_ATmega32U4__
 #endif // not needed when compile but needed when auto-complete of VSCode
 
-#define BAUD_REG 8 // 16MHz, 115200bps(when U2Xn=0)
-#define STRING_MAX_BYTES 80
-#define SS PB6
-
-#define sbi(PORT, BIT) PORT |= _BV(BIT)
-#define cbi(PORT, BIT) PORT &= ~_BV(BIT)
-
 #include <stdio.h>
-#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
-void initUart(void);
-void transmitUart(char);
-void transmitUartString(char *);
-void transmitUartStringCRLF(char *);
-void initSPIMaster(void);
-unsigned char transmitAndRecieveSPIbyte(unsigned char);
+#include "mega32u4_dualchosk2.h"
+#include "mega32u4_uart.h"
+
 void itoa8b(int, char *);
 
 int main(void)
@@ -73,63 +62,6 @@ int main(void)
         _delay_ms(100);
     }
     return 0;
-}
-
-void initUart(void)
-{
-    UBRR1H = (unsigned char)(BAUD_REG >> 8); // set baud rate...
-    UBRR1L = (unsigned char)(BAUD_REG & 0xFF); // ...to 115200bps
-    UCSR1B = _BV(RXEN1) | _BV(TXEN1); // enable RX and TX
-}
-
-void transmitUart(char data)
-{
-    while(!(UCSR1A & _BV(UDRE1)));
-    UDR1 = data;
-}
-
-void transmitUartString(char *data)
-{
-    char c;
-    int i;
-    for(i = 0; i < STRING_MAX_BYTES; i++) {
-        c = data[i];
-        if(c == '\0') {
-            break;
-        }
-        transmitUart(c);
-    }
-}
-
-void transmitUartStringCRLF(char *data)
-{
-    // char c;
-    // int i;
-    // for(i = 0; i < STRING_MAX_BYTES; i++) {
-    //     c = data[i];
-    //     if(c == '\0') {
-    //         break;
-    //     }
-    //     transmitUart(c);
-    // }
-    transmitUartString(data);
-    transmitUart('\r');
-    transmitUart('\n');
-}
-
-void initSPIMaster(void)
-{
-    DDRB = _BV(PB2) | _BV(PB1) | _BV(SS); // set MOSI, SCK and SS to output
-    SPCR = _BV(SPE) | _BV(DORD) | _BV(MSTR) | _BV(CPOL) | _BV(CPHA) |  _BV(SPR1) | _BV(SPR0); // SPI enable, LSB first, SPI Master, Mode 3, f_OSC/128(125kHz)
-    sbi(PORTB, SS); // set SS to 0(HIGH)
-}
-
-unsigned char transmitAndRecieveSPIbyte(unsigned char data)
-{
-    SPDR = data;
-    while(!(SPSR & _BV(SPIF)));
-    _delay_us(5);
-    return SPDR;
 }
 
 void itoa8b(int in, char *out)
