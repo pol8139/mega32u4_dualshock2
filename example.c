@@ -20,41 +20,21 @@ int main(void)
     transmitUartStringCRLF("init SPI master done");
     _delay_ms(500);
     char buffer[STRING_MAX_BYTES];
-    unsigned char buffer_byte[32];
+    unsigned char default_command[2] = {0x01, 0x42};
+    unsigned char buffer_byte[MAX_NUM_RECIEVE];
     unsigned char id;
-    int controller_type;
     int num_of_bytes;
     int i;
     while(1) {
-        cbi(PORTB, SS);
-        _delay_us(1);
-        transmitAndRecieveSPIbyte(0x01);
-        id = transmitAndRecieveSPIbyte(0x42);
-        controller_type = id >> 4;
-        if((id & 0x0F) == 0x00) {
-            num_of_bytes = 32;
-        } else {
-            num_of_bytes = (id & 0x0F) * 2;
-        }
-        if(transmitAndRecieveSPIbyte(0x00) != 'Z') {
-            _delay_us(1);
-            // sbi(PORTB, SS);
-            transmitUartStringCRLF("an error occurred (the third byte is not 'Z')");
-        }
-        for(i = 0; i < num_of_bytes; i++) {
-            buffer_byte[i] = transmitAndRecieveSPIbyte(0x00);
-        }
-        _delay_us(1);
-        sbi(PORTB, SS);
-        _delay_ms(16);
+        num_of_bytes = sendDS2Command(default_command, 2, buffer_byte);
         transmitUartString("ID: 0x");
-        itoa(id, buffer, 16);
+        itoa(buffer_byte[NUM_ID], buffer, 16);
         transmitUartStringCRLF(buffer);
         for(i = 0; i < num_of_bytes; i++) {
             transmitUartString("0b");
             itoa8b(buffer_byte[i], buffer);
             transmitUartString(buffer);
-            sprintf(buffer, " 0x%02X", buffer_byte[i]);
+            sprintf(buffer, " 0x%02x", buffer_byte[i]);
             transmitUartString(buffer);
             sprintf(buffer, " %03d", buffer_byte[i]);
             transmitUartStringCRLF(buffer);
@@ -68,7 +48,7 @@ void itoa8b(int in, char *out)
 {
     int i;
     const int digits = 8;
-    for(i = 0; i < (digits - 1); i++) {
+    for(i = 0; i < digits; i++) {
         if(((in >> (digits - 1 - i))) & 0x01 == 0x01) {
             out[i] = '1';
         } else {
