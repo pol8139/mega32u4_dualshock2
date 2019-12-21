@@ -15,7 +15,7 @@
 #include <util/delay.h>
 
 void initUart(void);
-void transmitUart(unsigned char);
+void transmitUart(char);
 void transmitUartString(char *);
 void transmitUartStringCRLF(char *);
 void initSPIMaster(void);
@@ -62,12 +62,9 @@ int main(void)
         itoa(id, buffer, 16);
         transmitUartStringCRLF(buffer);
         for(i = 0; i < num_of_bytes; i++) {
-            // itoa(buffer_byte[i], buffer, 2);
             transmitUartString("0b");
             itoa8b(buffer_byte[i], buffer);
             transmitUartString(buffer);
-            // transmitUartString(" 0x");
-            // itoa(buffer_byte[i], buffer, 16);
             sprintf(buffer, " 0x%02X", buffer_byte[i]);
             transmitUartString(buffer);
             sprintf(buffer, " %03d", buffer_byte[i]);
@@ -85,7 +82,7 @@ void initUart(void)
     UCSR1B = _BV(RXEN1) | _BV(TXEN1); // enable RX and TX
 }
 
-void transmitUart(unsigned char data)
+void transmitUart(char data)
 {
     while(!(UCSR1A & _BV(UDRE1)));
     UDR1 = data;
@@ -106,15 +103,16 @@ void transmitUartString(char *data)
 
 void transmitUartStringCRLF(char *data)
 {
-    char c;
-    int i;
-    for(i = 0; i < STRING_MAX_BYTES; i++) {
-        c = data[i];
-        if(c == '\0') {
-            break;
-        }
-        transmitUart(c);
-    }
+    // char c;
+    // int i;
+    // for(i = 0; i < STRING_MAX_BYTES; i++) {
+    //     c = data[i];
+    //     if(c == '\0') {
+    //         break;
+    //     }
+    //     transmitUart(c);
+    // }
+    transmitUartString(data);
     transmitUart('\r');
     transmitUart('\n');
 }
