@@ -17,4 +17,5 @@
 
 void initSPIMaster(void);
 unsigned char transmitAndRecieveSPIbyte(unsigned char);
-int sendDS2Command(unsigned char *, int, unsigned char *);
+int sendDS2Command(unsigned char *, unsigned char *);
+int configModeEnterDS2(unsigned char *);

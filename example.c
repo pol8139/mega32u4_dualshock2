@@ -6,7 +6,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "mega32u4_dualchosk2.h"
+#include "mega32u4_dualshock2.h"
 #include "mega32u4_uart.h"
 
 void itoa8b(int, char *);
@@ -20,13 +20,11 @@ int main(void)
     transmitUartStringCRLF("init SPI master done");
     _delay_ms(500);
     char buffer[STRING_MAX_BYTES];
-    unsigned char default_command[2] = {0x01, 0x42};
     unsigned char buffer_byte[MAX_NUM_RECIEVE];
-    unsigned char id;
     int num_of_bytes;
     int i;
     while(1) {
-        num_of_bytes = sendDS2Command(default_command, 2, buffer_byte);
+        num_of_bytes = readDataDS2(buffer_byte);
         transmitUartString("ID: 0x");
         itoa(buffer_byte[NUM_ID], buffer, 16);
         transmitUartStringCRLF(buffer);

@@ -1,4 +1,4 @@
-#include "mega32u4_dualchosk2.h"
+#include "mega32u4_dualshock2.h"
 
 void initSPIMaster(void)
 {
@@ -15,11 +15,15 @@ unsigned char transmitAndRecieveSPIbyte(unsigned char data)
     return SPDR;
 }
 
-int sendDS2Command(unsigned char *transmit, int num_send, unsigned char *recieve)
+int sendDS2Command(unsigned char *transmit, unsigned char *recieve)
 {
     int i;
     unsigned char transmit_command;
     int num_recieve = MAX_NUM_RECIEVE;
+    int num_send = sizeof(transmit) / sizeof(unsigned char);
+    char buffer[10];
+    itoa(num_send, buffer, 10);
+    transmitUartStringCRLF(buffer);
     cbi(PORTB, SS);
     _delay_us(LITTLE_DELAY);
     for(i = 0; i < num_recieve; i++) {
@@ -38,3 +42,8 @@ int sendDS2Command(unsigned char *transmit, int num_send, unsigned char *recieve
     return num_recieve;
 }
 
+int readDataDS2(unsigned char *recieve)
+{
+    static unsigned char read_data[] = {0x01, 0x42};
+    return sendDS2Command(read_data, recieve);
+}
