@@ -3,6 +3,7 @@
 #endif // not needed when compile but needed when auto-complete of VSCode
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <avr/io.h>
 #include <util/delay.h>
 
@@ -22,13 +23,12 @@ int main(void)
     char buffer[STRING_MAX_BYTES];
     unsigned char buffer_byte[MAX_NUM_RECIEVE];
     int num_of_bytes;
-    int i;
     while(1) {
-        num_of_bytes = readDataDS2(buffer_byte);
+        num_of_bytes = readDataAndVibrateDS2(buffer_byte, VIBRATE_SMALL_DISABLE);
         transmitUartString("ID: 0x");
         itoa(buffer_byte[NUM_ID], buffer, 16);
         transmitUartStringCRLF(buffer);
-        for(i = 0; i < num_of_bytes; i++) {
+        for(int i = 0; i < num_of_bytes; i++) {
             transmitUartString("0b");
             itoa8b(buffer_byte[i], buffer);
             transmitUartString(buffer);

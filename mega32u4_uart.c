@@ -16,8 +16,7 @@ void transmitUart(char data)
 void transmitUartString(char *data)
 {
     char c;
-    int i;
-    for(i = 0; i < STRING_MAX_BYTES; i++) {
+    for(int i = 0; i < STRING_MAX_BYTES; i++) {
         c = data[i];
         if(c == '\0') {
             break;
