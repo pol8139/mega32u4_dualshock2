@@ -1,10 +1,4 @@
-#ifndef __AVR_ATmega32U4__
-#define __AVR_ATmega32U4__
-#endif // not needed when compile but needed when auto-complete of VSCode
-
 #include <stdio.h>
-#include <stdlib.h>
-#include <avr/io.h>
 #include <util/delay.h>
 
 #include "mega32u4_dualshock2.h"
@@ -25,8 +19,7 @@ int main(void)
     int num_of_bytes;
     while(1) {
         num_of_bytes = readDataAndVibrateDS2(buffer_byte, VIBRATE_SMALL_DISABLE);
-        transmitUartString("ID: 0x");
-        itoa(buffer_byte[NUM_ID], buffer, 16);
+        sprintf(buffer, "ID: 0x%02x", buffer_byte[NUM_ID]);
         transmitUartStringCRLF(buffer);
         for(int i = 0; i < num_of_bytes; i++) {
             transmitUartString("0b");
