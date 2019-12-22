@@ -14,6 +14,7 @@
 #define LOCK_DISABLE 0x00
 #define VIBRATE_SMALL_ENABLE 1
 #define VIBRATE_SMALL_DISABLE 0
+#define VIBRATE_BIG_DISABLE 0
 
 #define sbi(PORT, BIT) PORT |= _BV(BIT)
 #define cbi(PORT, BIT) PORT &= ~_BV(BIT)
@@ -32,3 +33,5 @@ int queryModelAndModeDS2(unsigned char *);
 int readDataDS2(unsigned char *);
 int readDataAndVibrateDS2(unsigned char *, unsigned char);
 int readDataAndVibrateEXDS2(unsigned char *, unsigned char, unsigned char);
+int pressureEnableDS2(unsigned char *);
+int presTransStartDS2(unsigned char *);

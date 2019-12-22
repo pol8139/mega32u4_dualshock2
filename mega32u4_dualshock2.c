@@ -99,3 +99,15 @@ int readDataAndVibrateEXDS2(unsigned char *recieve, unsigned char vibrate_small,
     read_data_and_vibrate_ex[4] = vibrate_big;
     return sendDS2Command(read_data_and_vibrate_ex, sizeof(read_data_and_vibrate_ex), recieve);
 }
+
+int pressureEnableDS2(unsigned char *recieve)
+{
+    static unsigned char pressure_enable[] = {0x01, 0x4f, 0x00, 0xff, 0xff, 0x03, 0x00, 0x00, 0x00};
+    return sendDS2Command(pressure_enable, sizeof(pressure_enable), recieve);
+}
+
+int presTransStartDS2(unsigned char *recieve)
+{
+    static unsigned char pres_trans_start[] = {0x01, 0x43, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a};
+    return sendDS2Command(pres_trans_start, sizeof(pres_trans_start), recieve);
+}
