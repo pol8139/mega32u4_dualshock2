@@ -20,7 +20,7 @@
 #define cbi(PORT, BIT) PORT &= ~_BV(BIT)
 
 #define delayLittle(MICROSEC) _delay_us(MICROSEC * LITTLE_DELAY);
-#define delayFlame(FLAME) _delay_ms(FLAME * 16);
+#define delayFrame(FRAME) _delay_ms(FRAME * 16);
 
 #include <avr/io.h>
 #include <util/delay.h>

@@ -11,43 +11,43 @@ int main(void)
 {
     initUart();
     transmitUartStringCRLF("init UART done");
-    delayFlame(30);
+    delayFrame(30);
     initSPIMaster();
     transmitUartStringCRLF("init SPI master done");
-    delayFlame(30);
+    delayFrame(30);
     char buffer[STRING_MAX_BYTES];
     unsigned char buffer_byte[MAX_NUM_RECIEVE];
     int num_of_bytes = 0;
     while(1) {
         readDataDS2(buffer_byte);
-        delayFlame(1);
+        delayFrame(1);
         // if(error) {
         //     break;
         // }
         configModeEnterDS2(buffer_byte);
-        delayFlame(1);
+        delayFrame(1);
         queryModelAndModeDS2(buffer_byte);
-        delayFlame(1);
+        delayFrame(1);
         if(buffer_byte[NUM_ID] == 0xF3) {
             setModeAndLockDS2(buffer_byte, MODE_ANALOG, LOCK_DISABLE);
-            delayFlame(1);
+            delayFrame(1);
             vibrationEnableDS2(buffer_byte);
-            delayFlame(1);
+            delayFrame(1);
             configModeExitDS2(buffer_byte);
-            delayFlame(1);
+            delayFrame(1);
             configModeEnterDS2(buffer_byte);
-            delayFlame(1);
+            delayFrame(1);
             pressureEnableDS2(buffer_byte);
-            delayFlame(1);
+            delayFrame(1);
             presTransStartDS2(buffer_byte);
-            delayFlame(1);
+            delayFrame(1);
             while(1) {
                 num_of_bytes = readDataAndVibrateEXDS2(buffer_byte, VIBRATE_SMALL_DISABLE, VIBRATE_BIG_DISABLE);
                 // if(error) {
                 //     break;
                 // }
                 printBufferData(buffer_byte, num_of_bytes);
-                delayFlame(6);
+                delayFrame(6);
             }
         } else {
             while(1) {
@@ -56,10 +56,10 @@ int main(void)
                 //     break;
                 // }
                 printBufferData(buffer_byte, num_of_bytes);
-                delayFlame(6);
+                delayFrame(6);
             }
         }
-        delayFlame(6);
+        delayFrame(6);
     }
     return 0;
 }
