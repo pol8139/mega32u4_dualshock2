@@ -24,6 +24,7 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdint.h>
 
 void initSPIMaster(void);
 unsigned char transmitAndRecieveSPIbyte(unsigned char);
@@ -38,3 +39,5 @@ int readDataAndVibrateDS2(unsigned char *, unsigned char);
 int readDataAndVibrateEXDS2(unsigned char *, unsigned char, unsigned char);
 int pressureEnableDS2(unsigned char *);
 int presTransStartDS2(unsigned char *);
+uint16_t easyDeadZone(uint16_t);
+uint16_t easyDechatter(uint16_t);

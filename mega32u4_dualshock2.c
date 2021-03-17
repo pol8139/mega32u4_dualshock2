@@ -111,3 +111,22 @@ int presTransStartDS2(unsigned char *recieve)
     static unsigned char pres_trans_start[] = {0x01, 0x43, 0x00, 0x00, 0x5a, 0x5a, 0x5a, 0x5a, 0x5a};
     return sendDS2Command(pres_trans_start, sizeof(pres_trans_start), recieve);
 }
+
+uint16_t easyDeadZone(uint16_t raw_input)
+{
+	if((0x6000 <= raw_input) && (raw_input <= 0xA000) && (0x60 <= (raw_input & 0xFF)) && ((raw_input & 0xFF) <= 0xA0)) {
+		return 0x8080;
+	} else {
+		return raw_input;
+	}
+}
+
+uint16_t easyDechatter(uint16_t raw_input)
+{
+	static uint16_t buf_dechatter[2] = {};
+	if(raw_input == buf_dechatter[0]) {
+		buf_dechatter[1] = raw_input;
+	}
+	buf_dechatter[0] = raw_input;
+	return buf_dechatter[1];
+}
