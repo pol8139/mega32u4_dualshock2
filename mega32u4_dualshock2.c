@@ -112,12 +112,11 @@ int presTransStartDS2(unsigned char *recieve)
     return sendDS2Command(pres_trans_start, sizeof(pres_trans_start), recieve);
 }
 
-uint16_t easyDeadZone(uint16_t raw_input)
+void easyDeadZone8(uint8_t* raw_input)
 {
-	if((0x6000 <= raw_input) && (raw_input <= 0xA000) && (0x60 <= (raw_input & 0xFF)) && ((raw_input & 0xFF) <= 0xA0)) {
-		return 0x8080;
-	} else {
-		return raw_input;
+	if((0x60 <= raw_input[0]) && (raw_input[0] <= 0xA0) && (0x60 <= raw_input[1]) && (raw_input[1] <= 0xA0)) {
+		raw_input[0] = 0x80;
+        raw_input[1] = 0x80;
 	}
 }
 

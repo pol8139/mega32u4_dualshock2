@@ -39,5 +39,5 @@ int readDataAndVibrateDS2(unsigned char *, unsigned char);
 int readDataAndVibrateEXDS2(unsigned char *, unsigned char, unsigned char);
 int pressureEnableDS2(unsigned char *);
 int presTransStartDS2(unsigned char *);
-uint16_t easyDeadZone(uint16_t);
+void easyDeadZone8(uint8_t *);
 uint16_t easyDechatter(uint16_t);

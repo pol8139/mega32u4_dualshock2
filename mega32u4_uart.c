@@ -47,3 +47,18 @@ char recieveUART(void)
     c = 0xFF;
     return c_recieve;
 }
+
+char SingleHex2Char(uint8_t in)
+{
+	if(in < 10) {
+		return in + 48;
+	} else {
+		return in + 55;
+	}
+}
+
+void ByteHexDump(char *out, uint8_t in)
+{
+	out[0] = SingleHex2Char(in >> 4);
+	out[1] = SingleHex2Char(in & 0x0F);
+}

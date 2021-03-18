@@ -16,5 +16,7 @@ void transmitUart(char);
 void transmitUartString(char *);
 void transmitUartStringCRLF(char *);
 char recieveUART(void);
+char SingleHex2Char(uint8_t);
+void ByteHexDump(char *, uint8_t);
 
 #endif
